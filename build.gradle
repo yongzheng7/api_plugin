@@ -1,0 +1,96 @@
+apply plugin: 'java-library'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+
+def baseUrl = '项目git路径'
+def siteUrl = baseUrl
+def gitUrl = "${baseUrl}/ hzAspectJ"
+def issueUrl = "${gitUrl}/issues"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation gradleApi()//gradle sdk
+    implementation localGroovy()//groovy sdk
+    implementation 'com.android.tools.build:transform-api:1.5.0'
+    implementation 'com.android.tools.build:gradle:4.0.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group ='com.atom.plugin'  // 组名 jcenter中的仓库路径
+version ='1.0.0' // 版本
+
+install {
+
+    repositories {
+        mavenInstaller {
+            // This generates POM.xml with proper paramters
+            pom.project {
+                //添加项目描述
+                name 'Gradle Plugin for Android'
+                url siteUrl
+                //设置开源证书信息
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                //添加开发者信息
+                developers {
+                    developer {
+                        name 'wuyongzheng775'
+                        email 'wyz1055115204@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+//配置上传Bintray相关信息
+
+bintray {
+    user = 'wuyongzheng'
+    key =   '4125ea4e0617204dafa1b5fef97d1acf00020e16'
+    configurations = ['archives']
+    pkg {
+        repo = 'atom_api_plugin' // 上传到中央仓库的名称
+        name = 'plugin' // 上传到jcenter 的项目名称
+        desc = 'test aop' // 项目描述
+        websiteUrl = siteUrl
+        issueTrackerUrl = issueUrl
+        vcsUrl = gitUrl
+        labels = ['gradle', 'plugin']
+        licenses = ['Apache-2.0']
+        publish = true
+    }
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        //提交到远程服务器：
+//             repository(url: "https://bintray.com/wuyongzheng/atom_api_plugin/apiplugin") {
+//                authentication(userName: "wuyongzheng", password: "Was153523")
+//             }
+        //本地的Maven地址
+        repository(url: uri('../repository'))//仓库路径，此处是项目目录下的repo文件夹
+        pom.groupId = 'com.atom.plugin'//groupid自行定义，一般是包名
+        pom.artifactId = 'api-plugin'//自行定义
+        pom.version = '1.0.3'//版本名称
+    }
+}
