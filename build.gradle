@@ -5,9 +5,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 
-def baseUrl = '项目git路径'
+def baseUrl = 'https://github.com/yongzheng7'
 def siteUrl = baseUrl
-def gitUrl = "${baseUrl}/ hzAspectJ"
+def gitUrl = "${baseUrl}/api_plugin"
 def issueUrl = "${gitUrl}/issues"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -26,7 +26,55 @@ repositories {
 }
 
 group ='com.atom.plugin'  // 组名 jcenter中的仓库路径
-version ='1.0.0' // 版本
+version ='1.0.1' // 版本
+
+// 指定编码
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
+
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        failOnError  false
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "http://docs.oracle.com/javase/7/docs/api"
+    }
+}
+
+// 制作文档(Javadoc)
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
 
 install {
 
@@ -90,7 +138,7 @@ uploadArchives {
         //本地的Maven地址
         repository(url: uri('../repository'))//仓库路径，此处是项目目录下的repo文件夹
         pom.groupId = 'com.atom.plugin'//groupid自行定义，一般是包名
-        pom.artifactId = 'api-plugin'//自行定义
-        pom.version = '1.0.3'//版本名称
+        pom.artifactId = 'atom-plugin'//自行定义
+        pom.version = '1.0.2'//版本名称
     }
 }
