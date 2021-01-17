@@ -27,7 +27,7 @@ class ScanSetting {
     /**
      * 路由表的注册代码将生成插入到该类AbstractApiImplContext（路由中心）中
      */
-    static final String GENERATE_TO_CLASS_NAME = 'com/atom/core/AbstractApiImplContext'
+    static final String GENERATE_TO_CLASS_NAME = 'com/atom/runtime/AtomApi'
     /**
      * 路由表的注册代码将生成插入的类文件名
      */
