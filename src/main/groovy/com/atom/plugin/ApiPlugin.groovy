@@ -18,13 +18,12 @@ public class ApiPlugin implements Plugin<Project> {
             def android = project.extensions.getByType(AppExtension)
             def transformImpl = new RegisterTransform(project)
 
-            //初始化 xrouter-plugin 扫描设置
+            //初始化 atom—api-plugin 扫描设置
             ArrayList<ScanSetting> list = new ArrayList<>(1)
             list.add(new ScanSetting('com/atom/annotation/bean/ApiImpls' , false))   //apt
             RegisterTransform.registerList = list
             android.registerTransform(transformImpl)
         }
         Logger.i('Project enable atom-api-register plugin --> over')
-        println('Project enable atom-api-register plugin --> over')
     }
 }

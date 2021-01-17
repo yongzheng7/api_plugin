@@ -20,9 +20,6 @@ import org.gradle.api.Project
 
 /**
  * 日志记录
- *
- * @author xuexiang
- * @since 2018/5/17 上午12:53
  */
 class Logger {
     static org.gradle.api.logging.Logger logger
@@ -34,22 +31,18 @@ class Logger {
     static void i(String info) {
         if (null != info && null != logger) {
             logger.info("Atom::Register >>> " + info)
-            println("Atom::Register >>> " + info)
         }
     }
 
     static void e(String error) {
         if (null != error && null != logger) {
             logger.error("Atom::Register >>> " + error)
-            println("Atom::Register >>> " + error)
-
         }
     }
 
     static void w(String warning) {
         if (null != warning && null != logger) {
             logger.warn("Atom::Register >>> " + warning)
-            println("Atom::Register >>> " + warning)
         }
     }
 }

@@ -10,12 +10,8 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
 /**
- * 扫描 com/xuexiang/xrouter/ 所有的class文件
- * <p>寻找到自动生成的路由注册接口：routers、interceptors、providers</p>
- * <p>接口包括：IRouteRoot、IInterceptorGroup、IProviderGroup</p>
- *
- * @author xuexiang
- * @since 2018/5/21 下午9:44
+ * 扫描 com/atom.proxy 所有的class文件
+ * <p>寻找到自动生成的class文件，通过指定的继承类和实现的接口进行过滤</p>
  */
 class ScanUtils {
 
@@ -38,8 +34,8 @@ class ScanUtils {
                     scanClass(inputStream)
                     inputStream.close()
                 }  else if (ScanSetting.GENERATE_TO_CLASS_FILE_NAME == entryName) {
-                    // 标记这个jar文件中是否存在 AbstractApiImplContext.class -- 需要动态注入注册代码的类
-                    // 在扫描完成后,将向 AbstractApiImplContext.class 的loadProxyClass方法中注入注册代码
+                    // 标记这个jar文件中是否存在 AtomApi.class -- 需要动态注入注册代码的类
+                    // 在扫描完成后,将向 AtomApi.class 的loadProxyClass方法中注入注册代码
                     RegisterTransform.fileContainsInitClass = destFile
                 }
             }
@@ -56,7 +52,7 @@ class ScanUtils {
     }
 
     /**
-     * 判断扫描的类的包名是否是 annotationProcessor自动生成路由代码的包名：com/xuexiang/xrouter/routes/
+     * 判断扫描的类的包名是否是 annotationProcessor自动生成路由代码的包名：com/atom/proxy
      * @param classFilePath 扫描的class文件的路径
      */
     static boolean shouldProcessClass(String classFilePath) {

@@ -11,10 +11,7 @@ import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
 
 /**
- * 向 LogisticsCenter.class 的 loadRouterMap 中 注入路由注册的代码
- *
- * @author xuexiang
- * @since 2018/5/21 下午10:19
+ * 向 AtomApi.class 的 loadProxyClass 中 注入代码
  */
 class RegisterCodeGenerator {
     ScanSetting extension
@@ -38,9 +35,7 @@ class RegisterCodeGenerator {
     }
 
     /**
-     * 遍历jar包找到 LogisticsCenter.class 文件，向其中加入注册的代码
-     * @param jarFile the jar file which contains LogisticsCenter.class
-     * @return
+     * 遍历jar包找到 AtomApi.class 文件，向其中加入注册的代码
      */
     private File insertInitCodeIntoJarFile(File jarFile) {
         if (jarFile) {
@@ -53,7 +48,7 @@ class RegisterCodeGenerator {
             Enumeration enumeration = file.entries()
             JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(optJar))
 
-            //遍历jar包，找到 LogisticsCenter.class 文件
+            //遍历jar包，找到 AtomApi.class 文件
             while (enumeration.hasMoreElements()) {
                 JarEntry jarEntry = (JarEntry) enumeration.nextElement()
                 String entryName = jarEntry.getName()
@@ -61,9 +56,7 @@ class RegisterCodeGenerator {
                 InputStream inputStream = file.getInputStream(jarEntry)
                 jarOutputStream.putNextEntry(zipEntry)
                 if (ScanSetting.GENERATE_TO_CLASS_FILE_NAME == entryName) {
-
                     Logger.i('Insert init code to class >> ' + entryName)
-
                     def bytes = referHackWhenInit(inputStream)
                     jarOutputStream.write(bytes)
                 } else {
@@ -112,7 +105,7 @@ class RegisterCodeGenerator {
                                   String signature, String[] exceptions) {
             MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions)
             //generate code into this method
-            if (name == ScanSetting.GENERATE_TO_METHOD_NAME) { //找到动态生成注册代码需要注入的 loadRouterMap 方法
+            if (name == ScanSetting.GENERATE_TO_METHOD_NAME) { //找到动态生成注册代码需要注入的 loadProxyClass 方法
                 mv = new RouteMethodVisitor(Opcodes.ASM5, mv)
             }
             return mv
@@ -132,7 +125,8 @@ class RegisterCodeGenerator {
                 extension.classList.each { name ->
                     name = name.replaceAll("/", ".")  //将类文件的路径转化为包的路径
                     mv.visitLdcInsn(name) //访问方法的参数--搜索到的接口类名
-                    // 生成注册代码到 LogisticsCenter.loadRouterMap() 方法中
+                    // 生成注册代码到 AtomApi.loadProxyClass() 方法中
+                    // 在该方法中进行 例如 AtomApi.registerClass("com.atom.apt.proxy.AtomAppProxy.class")
                     mv.visitMethodInsn(Opcodes.INVOKESTATIC   //操作码
                             , ScanSetting.GENERATE_TO_CLASS_NAME //访问类的类名
                             , ScanSetting.REGISTER_METHOD_NAME //访问的方法

@@ -18,22 +18,19 @@ package com.atom.plugin.utils
 
 /**
  * 扫描注册配置
- *
- * @author xuexiang
- * @since 2018/5/17 上午12:39
  */
 class ScanSetting {
     static final String PLUGIN_NAME = "com.atom.api"
     /**
-     * 路由表的注册代码将生成插入到该类AbstractApiImplContext（路由中心）中
+     * 将apt自动生成的代码通过插件写入到该类中
      */
     static final String GENERATE_TO_CLASS_NAME = 'com/atom/runtime/AtomApi'
     /**
-     * 路由表的注册代码将生成插入的类文件名
+     * class权限定名
      */
     static final String GENERATE_TO_CLASS_FILE_NAME = GENERATE_TO_CLASS_NAME + '.class'
     /**
-     * 注册代码将动态生成到loadRouterMap方法中
+     * 代码写到了AtomApi类中的loadProxyClass方法
      */
     static final String GENERATE_TO_METHOD_NAME = 'loadProxyClass'
     /**
@@ -42,7 +39,7 @@ class ScanSetting {
     static final String ROUTER_CLASS_PACKAGE_NAME = 'com/atom/apt'
 
     /**
-     * register method name in class: {@link #GENERATE_TO_CLASS_NAME}
+     * 在AtomApi类中的loadProxyClass方法需要调用的方法
      */
     static final String REGISTER_METHOD_NAME = 'registerClass'
     /**
@@ -56,7 +53,7 @@ class ScanSetting {
     String superName = ''
 
     /**
-     * 包含LogisticsCenter类的jar包文件 {@link #GENERATE_TO_CLASS_NAME}
+     * 包含AtomApi类的jar包文件 {@link #GENERATE_TO_CLASS_NAME}
      */
     File fileContainsInitClass
     /**
@@ -67,7 +64,8 @@ class ScanSetting {
 
     /**
      * 自动扫描注册的配置构造器
-     * @param interfaceName 需要扫描的接口名
+     * @param name 可能是接口也可能是继承类
+     * @param isInterface true=接口  false=继承类
      */
     ScanSetting(String name , boolean isInterface){
         if(isInterface){

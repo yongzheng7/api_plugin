@@ -32,7 +32,7 @@ class RegisterTransform extends Transform {
      */
     static ArrayList<ScanSetting> registerList
     /**
-     * 包含 AbstractApiImplContext 类的jar文件
+     * 包含 AtomApi 类的jar文件
      */
     static File fileContainsInitClass
 
@@ -136,7 +136,7 @@ class RegisterTransform extends Transform {
 
         Logger.i('Scan finish, current cost time ' + (System.currentTimeMillis() - startTime) + "ms")
 
-        //扫描结束后，将扫描到的路由注册结果自动注入到 LogisticsCenter.class 的loadRouterMap方法中
+        //扫描结束后，将扫描到的路由注册结果自动注入到 AtomApi.class 的loadProxyClass方法中
         if (fileContainsInitClass) {
             registerList.each { ext ->
                 Logger.i('Insert register code to file ' + fileContainsInitClass.absolutePath)
