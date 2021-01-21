@@ -23,7 +23,7 @@ uploadArchives {
         repository(url: uri('../repository'))//仓库路径，此处是项目目录下的repo文件夹
         pom.groupId = 'com.atom.plugin'//groupid自行定义，一般是包名
         pom.artifactId = 'atom-plugin'//自行定义
-        pom.version = '1.0.2'//版本名称
+        pom.version = '2.0.0'//版本名称
     }
 }
 
@@ -43,7 +43,7 @@ def issueUrl = "${gitUrl}/issues"
 
 // 指定group
 group='com.atom.plugin'
-version ='1.0.5' // 版本
+version ='2.0.0' // 版本
 //---------------------------------------------
 
 
